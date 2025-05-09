@@ -213,6 +213,39 @@ class RegisterScreen extends StatelessWidget {
 class BakeryListScreen extends StatelessWidget {
   const BakeryListScreen({super.key});
 
+  final List<Map<String, String>> bakeries = const [
+    {
+      "name": "Pastelería de Gracia",
+      "address": "Calle ejemplo #75",
+      "description": "Ofrecemos variedad de postres...",
+      "image": "assets/images/tortaSelvaNegra.png",
+    },
+    {
+      "name": "Dulces Momentos",
+      "address": "Avenida Dulce #123",
+      "description": "Especialistas en tortas personalizadas...",
+      "image": "assets/images/cheesecakeDeFresa.png",
+    },
+    {
+      "name": "Sabores Caseros",
+      "address": "Carrera 45 #67-89",
+      "description": "Postres con el sabor de casa...",
+      "image": "assets/images/galletasDeAvena.png",
+    },
+    {
+      "name": "Delicias al Horno",
+      "address": "Calle 10 #20-30",
+      "description": "Panadería y pastelería artesanal...",
+      "image": "assets/images/tortaDeZanahoria.png",
+    },
+    {
+      "name": "Postres y Más",
+      "address": "Diagonal 15 #45-67",
+      "description": "Postres para toda ocasión...",
+      "image": "assets/images/browniesDeChocolate.png",
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,7 +256,7 @@ class BakeryListScreen extends StatelessWidget {
             // Acción para abrir el menú
           },
         ),
-        title: const Text('Lista de Pastelerías'),
+        title: const Text('Lista de Restaurantes Locales'),
         centerTitle: true,
       ),
       body: Padding(
@@ -233,7 +266,7 @@ class BakeryListScreen extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Postres',
+                hintText: 'Buscar restaurantes',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -242,15 +275,16 @@ class BakeryListScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                itemCount: 5, // Número de pastelerías
+                itemCount: bakeries.length,
                 itemBuilder: (context, index) {
+                  final bakery = bakeries[index];
                   return Card(
                     margin: const EdgeInsets.only(bottom: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(
-                          'https://via.placeholder.com/400x200',
+                        Image.asset(
+                          bakery["image"]!,
                           width: double.infinity,
                           height: 200,
                           fit: BoxFit.cover,
@@ -262,15 +296,15 @@ class BakeryListScreen extends StatelessWidget {
                             children: [
                               ListTile(
                                 leading: CircleAvatar(
-                                  child: Text('A'), // Inicial de la empresa
+                                  child: Text(bakery["name"]![0]),
                                 ),
-                                title: const Text('Pastelería de Gracia'),
-                                subtitle: const Text('Calle ejemplo #75'),
+                                title: Text(bakery["name"]!),
+                                subtitle: Text(bakery["address"]!),
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Ofrecemos variedad de postres...',
-                                style: TextStyle(fontSize: 14),
+                              Text(
+                                bakery["description"]!,
+                                style: const TextStyle(fontSize: 14),
                               ),
                               const SizedBox(height: 8),
                               Align(
@@ -281,7 +315,10 @@ class BakeryListScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const BakeryProductsScreen(),
+                                            BakeryProductsScreen(
+                                          bakeryName: bakery["name"]!,
+                                          bakeryImage: bakery["image"]!,
+                                        ),
                                       ),
                                     );
                                   },
@@ -305,10 +342,64 @@ class BakeryListScreen extends StatelessWidget {
 }
 
 class BakeryProductsScreen extends StatelessWidget {
-  const BakeryProductsScreen({super.key});
+  final String bakeryName;
+  final String bakeryImage;
+
+  const BakeryProductsScreen({
+    super.key,
+    required this.bakeryName,
+    required this.bakeryImage,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, List<Map<String, String>>> bakeryProducts = {
+      "Pastelería de Gracia": [
+    {
+      "productName": "Torta Selva Negra",
+      "productDescription": "Torta típica de la cocina de Baden...",
+      "productImage": "assets/images/tortaSelvaNegra.png",
+      "productPrice": "\$40.000",
+    },
+    {
+      "productName": "Cheesecake de Fresa",
+      "productDescription": "Delicioso cheesecake con fresas frescas...",
+      "productImage": "assets/images/cheesecakeDeFresa.png",
+      "productPrice": "\$35.000",
+    },
+  ],
+  "Dulces Momentos": [
+    {
+      "productName": "Brownies de Chocolate",
+      "productDescription": "Brownies caseros con trozos de chocolate...",
+      "productImage": "assets/images/browniesDeChocolate.png",
+      "productPrice": "\$25.000",
+    },
+    {
+      "productName": "Cupcakes de Vainilla",
+      "productDescription": "Cupcakes suaves con crema de vainilla...",
+      "productImage": "assets/images/cupcakeDeVainilla.png",
+      "productPrice": "\$20.000",
+    },
+  ],
+  "Sabores Caseros": [
+    {
+      "productName": "Galletas de Avena",
+      "productDescription": "Galletas saludables con avena y pasas...",
+      "productImage": "assets/images/galletasDeAvena.png",
+      "productPrice": "\$15.000",
+    },
+    {
+      "productName": "Torta de Zanahoria",
+      "productDescription": "Torta casera con zanahoria y nueces...",
+      "productImage": "assets/images/tortaDeZanahoria.png",
+      "productPrice": "\$30.000",
+    },
+  ],
+    };
+
+    final products = bakeryProducts[bakeryName] ?? [];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -317,7 +408,7 @@ class BakeryProductsScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Productos'),
+        title: Text(bakeryName),
         centerTitle: true,
       ),
       body: Padding(
@@ -325,52 +416,30 @@ class BakeryProductsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Image.asset(
+              bakeryImage,
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 16),
             const Text(
               "Productos",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Card(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.network(
-                    'https://via.placeholder.com/400x200',
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Torta selva negra",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text("Torta típica de la cocina de Baden..."),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text("Ver"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(
+                    productName: product["productName"]!,
+                    productDescription: product["productDescription"]!,
+                    productImage: product["productImage"]!,
+                    productPrice: product["productPrice"]!,
+                  );
+                },
               ),
             ),
           ],
@@ -380,15 +449,88 @@ class BakeryProductsScreen extends StatelessWidget {
   }
 }
 
-class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+class ProductCard extends StatelessWidget {
+  final String productName;
+  final String productDescription;
+  final String productImage;
+  final String productPrice;
+
+  const ProductCard({
+    super.key,
+    required this.productName,
+    required this.productDescription,
+    required this.productImage,
+    required this.productPrice,
+  });
 
   @override
-  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            productImage,
+            width: double.infinity,
+            height: 200,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  productName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(productDescription),
+                const SizedBox(height: 8),
+                Text(
+                  productPrice,
+                  style: const TextStyle(color: Colors.green, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailScreen(
+                            productName: productName,
+                            productImage: productImage,
+                            productPrice: productPrice,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text("Ver más"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  String _selectedSize = "Pequeño";
+class ProductDetailScreen extends StatelessWidget {
+  final String productName;
+  final String productImage;
+  final String productPrice;
+
+  const ProductDetailScreen({
+    super.key,
+    required this.productName,
+    required this.productImage,
+    required this.productPrice,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -408,40 +550,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              'https://via.placeholder.com/400x300',
+            Image.asset(
+              productImage,
               width: double.infinity,
               height: 300,
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 16),
-            const Text(
-              "Torta selva negra",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            Text(
+              productName,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             const Chip(label: Text("Pastelería")),
             const SizedBox(height: 8),
-            const Text(
-              "\$40.000",
-              style: TextStyle(fontSize: 24, color: Colors.green),
+            Text(
+              productPrice,
+              style: const TextStyle(fontSize: 24, color: Colors.green),
             ),
             const SizedBox(height: 8),
             const Text("Contiene huevos, leche, chocolate, cerezas"),
-            const SizedBox(height: 16),
-            DropdownButton<String>(
-              value: _selectedSize,
-              items: const [
-                DropdownMenuItem(value: "Pequeño", child: Text("Pequeño")),
-                DropdownMenuItem(value: "Mediano", child: Text("Mediano")),
-                DropdownMenuItem(value: "Grande", child: Text("Grande")),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _selectedSize = value!;
-                });
-              },
-            ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
