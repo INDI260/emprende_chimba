@@ -60,6 +60,7 @@ class LoginScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white, // Asegura contraste en el texto
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
@@ -72,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                 },
                 child: const Text(
                   'Aceptar',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white), // Color blanco explícito
                 ),
               ),
             ),
@@ -188,6 +189,7 @@ class RegisterScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white, // Contraste para el texto
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
@@ -200,7 +202,7 @@ class RegisterScreen extends StatelessWidget {
                 },
                 child: const Text(
                   'Registrarse',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white), // Color blanco explícito
                 ),
               ),
             ),
@@ -217,13 +219,13 @@ class BakeryListScreen extends StatelessWidget {
   final List<Map<String, String>> bakeries = const [
     {
       "name": "Pastelería de Gracia",
-      "address": "Calle ejemplo #75",
+      "address": "Cra. 7 #45-12, Bogotá",
       "description": "Ofrecemos variedad de postres...",
       "image": "assets/images/tortaSelvaNegra.png",
     },
     {
       "name": "Dulces Momentos",
-      "address": "Avenida Dulce #123",
+      "address": "Cl. 85 #12-34, Bogotá",
       "description": "Especialistas en tortas personalizadas...",
       "image": "assets/images/cheesecakeDeFresa.png",
     },
@@ -259,7 +261,7 @@ class BakeryListScreen extends StatelessWidget {
             },
           ),
         ),
-        title: const Text('Lista de Restaurantes Locales'),
+        title: const Text('Emprendimientos Locales'),
         centerTitle: true,
       ),
       drawer: Drawer(
@@ -460,7 +462,7 @@ class BakeryProductsScreen extends StatelessWidget {
             Image.asset(
               bakeryImage,
               width: double.infinity,
-              height: 200,
+              height: 100,
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 16),
@@ -617,6 +619,7 @@ class ProductDetailScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white, // Contraste para el texto
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: () {
@@ -624,7 +627,7 @@ class ProductDetailScreen extends StatelessWidget {
                 },
                 child: const Text(
                   "Comprar",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white), // Color blanco explícito
                 ),
               ),
             ),
@@ -640,37 +643,64 @@ class StatisticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Estadísticas'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
+    return DefaultTabController(
+      length: 3, // Cambia a 3 pestañas
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Estadísticas'),
+          centerTitle: true,
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Ventas'),
+              Tab(text: 'Clientes'),
+              Tab(text: 'Sugerencias'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
           children: [
-            const Text(
-              'Resumen de Ventas',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildSalesSummary(),
-            const SizedBox(height: 24),
-            const Text(
-              'Productos Más Vendidos',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildTopProducts(),
-            const SizedBox(height: 24),
-            const Text(
-              'Ventas Semanales',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildSalesChart(),
+            _SalesStatisticsTab(),
+            _CustomerStatisticsTab(),
+            _SuggestionsTab(), // Nueva pestaña
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SalesStatisticsTab extends StatelessWidget {
+  const _SalesStatisticsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const Text(
+            'Resumen de Ventas',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildSalesSummary(),
+          const SizedBox(height: 16),
+          _buildAverageSpending(), // Nueva información de gasto promedio
+          const SizedBox(height: 24),
+          const Text(
+            'Productos Más Vendidos',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildTopProducts(),
+          const SizedBox(height: 24),
+          const Text(
+            'Ventas Semanales',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildSalesChart(),
+        ],
       ),
     );
   }
@@ -682,6 +712,39 @@ class StatisticsScreen extends StatelessWidget {
         _StatCard(title: 'Total Ventas', value: '\$1.200.000'),
         _StatCard(title: 'Pedidos', value: '150'),
       ],
+    );
+  }
+
+  Widget _buildAverageSpending() {
+    // Ejemplo: Total ventas / pedidos = gasto promedio
+    final double totalVentas = 1200000;
+    final int pedidos = 150;
+    final double promedio = totalVentas / pedidos;
+
+    return Card(
+      color: Colors.purple[50],
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            const Icon(Icons.account_balance_wallet, color: Colors.purple),
+            const SizedBox(width: 12),
+            const Text(
+              'Gasto promedio por cliente:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            Text(
+              '\$${promedio.toStringAsFixed(0)}',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.purple,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -740,6 +803,217 @@ class StatisticsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CustomerStatisticsTab extends StatelessWidget {
+  const _CustomerStatisticsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const Text(
+            'Resumen de Clientes',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: const [
+              _StatCard(title: 'Clientes totales', value: '85'),
+              _StatCard(title: 'Clientes nuevos', value: '12'),
+            ],
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Clientes más frecuentes',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildTopCustomers(),
+          const SizedBox(height: 24),
+          const Text(
+            'Distribución por género',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildGenderPieChart(),
+          const SizedBox(height: 24),
+          const Text(
+            'Distribución por grupo de edad',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildAgeBarChart(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopCustomers() {
+    final customers = [
+      {'name': 'Ana López', 'orders': '15'},
+      {'name': 'Carlos Pérez', 'orders': '12'},
+      {'name': 'María Gómez', 'orders': '10'},
+    ];
+
+    return Column(
+      children: customers.map((c) {
+        return ListTile(
+          leading: const Icon(Icons.person),
+          title: Text(c['name']!),
+          trailing: Text('${c['orders']} pedidos'),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildGenderPieChart() {
+    return SizedBox(
+      height: 180,
+      child: PieChart(
+        PieChartData(
+          sections: [
+            PieChartSectionData(
+              color: Colors.purple,
+              value: 60,
+              title: 'Mujeres\n60%',
+              radius: 60,
+              titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            PieChartSectionData(
+              color: Colors.pinkAccent,
+              value: 35,
+              title: 'Hombres\n35%',
+              radius: 60,
+              titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            PieChartSectionData(
+              color: Colors.grey,
+              value: 5,
+              title: 'Otro\n5%',
+              radius: 60,
+              titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ],
+          sectionsSpace: 4,
+          centerSpaceRadius: 30,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAgeBarChart() {
+    return SizedBox(
+      height: 200,
+      child: BarChart(
+        BarChartData(
+          alignment: BarChartAlignment.spaceAround,
+          maxY: 40,
+          barTouchData: BarTouchData(enabled: false),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: true, reservedSize: 28),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, _) {
+                  switch (value.toInt()) {
+                    case 0:
+                      return const Text('18-25');
+                    case 1:
+                      return const Text('26-35');
+                    case 2:
+                      return const Text('36-45');
+                    case 3:
+                      return const Text('46-60');
+                    case 4:
+                      return const Text('60+');
+                    default:
+                      return const Text('');
+                  }
+                },
+                interval: 1,
+              ),
+            ),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ),
+          borderData: FlBorderData(show: false),
+          barGroups: [
+            BarChartGroupData(x: 0, barRods: [
+              BarChartRodData(toY: 25, color: Colors.purple, width: 18),
+            ]),
+            BarChartGroupData(x: 1, barRods: [
+              BarChartRodData(toY: 35, color: Colors.pinkAccent, width: 18),
+            ]),
+            BarChartGroupData(x: 2, barRods: [
+              BarChartRodData(toY: 20, color: Colors.orange, width: 18),
+            ]),
+            BarChartGroupData(x: 3, barRods: [
+              BarChartRodData(toY: 15, color: Colors.green, width: 18),
+            ]),
+            BarChartGroupData(x: 4, barRods: [
+              BarChartRodData(toY: 5, color: Colors.blueGrey, width: 18),
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SuggestionsTab extends StatelessWidget {
+  const _SuggestionsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const Text(
+            'Sugerencias personalizadas para tu negocio',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          const ListTile(
+            leading: Icon(Icons.campaign, color: Colors.purple),
+            title: Text('Promociones y descuentos'),
+            subtitle: Text('Ofrece descuentos por tiempo limitado o combos para incentivar compras mayores.'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.star, color: Colors.orange),
+            title: Text('Programa de fidelidad'),
+            subtitle: Text('Premia a los clientes frecuentes con puntos o recompensas.'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.share, color: Colors.blue),
+            title: Text('Presencia en redes sociales'),
+            subtitle: Text('Publica fotos atractivas de tus productos y promociones en Instagram y Facebook.'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.delivery_dining, color: Colors.green),
+            title: Text('Ofrece servicio a domicilio'),
+            subtitle: Text('Facilita la compra a tus clientes llevando los productos a su casa.'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.feedback, color: Colors.teal),
+            title: Text('Solicita retroalimentación'),
+            subtitle: Text('Pregunta a tus clientes qué productos les gustaría ver o mejorar.'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.new_releases, color: Colors.redAccent),
+            title: Text('Lanza productos nuevos'),
+            subtitle: Text('Introduce novedades regularmente para mantener el interés de tus clientes.'),
+          ),
+        ],
       ),
     );
   }
