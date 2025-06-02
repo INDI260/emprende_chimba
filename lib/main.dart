@@ -974,6 +974,12 @@ class _SuggestionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Datos simulados para personalizar sugerencias
+    final double gastoPromedio = 1200000 / 150; // $8.000
+    final topProduct = 'Brownies';
+    final topAgeGroup = '26-35';
+    final topGender = 'Mujeres';
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -983,35 +989,35 @@ class _SuggestionsTab extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          const ListTile(
-            leading: Icon(Icons.campaign, color: Colors.purple),
-            title: Text('Promociones y descuentos'),
-            subtitle: Text('Ofrece descuentos por tiempo limitado o combos para incentivar compras mayores.'),
+          ListTile(
+            leading: const Icon(Icons.trending_up, color: Colors.purple),
+            title: const Text('Potencia tu producto más vendido'),
+            subtitle: Text('Los $topProduct son los productos más vendidos. Considera ofrecer combos o promociones especiales para aumentar aún más sus ventas.'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.group, color: Colors.pinkAccent),
+            title: const Text('Enfócate en tu grupo de edad principal'),
+            subtitle: Text('La mayoría de tus clientes tienen entre $topAgeGroup años. Crea campañas y productos dirigidos a este segmento para incrementar la fidelización.'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.woman, color: Colors.purple),
+            title: const Text('Aprovecha la preferencia de género'),
+            subtitle: Text('El $topGender representa la mayor parte de tu clientela. Personaliza la comunicación y promociones para este público.'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_balance_wallet, color: Colors.green),
+            title: const Text('Aumenta el gasto promedio'),
+            subtitle: Text('El gasto promedio por cliente es de \$${gastoPromedio.toStringAsFixed(0)}. Ofrece productos complementarios o incentiva compras mayores para elevar este valor.'),
           ),
           const ListTile(
-            leading: Icon(Icons.star, color: Colors.orange),
-            title: Text('Programa de fidelidad'),
-            subtitle: Text('Premia a los clientes frecuentes con puntos o recompensas.'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.share, color: Colors.blue),
-            title: Text('Presencia en redes sociales'),
-            subtitle: Text('Publica fotos atractivas de tus productos y promociones en Instagram y Facebook.'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.delivery_dining, color: Colors.green),
-            title: Text('Ofrece servicio a domicilio'),
-            subtitle: Text('Facilita la compra a tus clientes llevando los productos a su casa.'),
+            leading: Icon(Icons.person_add, color: Colors.blue),
+            title: Text('Capta nuevos clientes'),
+            subtitle: Text('Considera campañas de referidos o descuentos para primeras compras, ya que tu base de clientes nuevos es de 12 este periodo.'),
           ),
           const ListTile(
             leading: Icon(Icons.feedback, color: Colors.teal),
-            title: Text('Solicita retroalimentación'),
-            subtitle: Text('Pregunta a tus clientes qué productos les gustaría ver o mejorar.'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.new_releases, color: Colors.redAccent),
-            title: Text('Lanza productos nuevos'),
-            subtitle: Text('Introduce novedades regularmente para mantener el interés de tus clientes.'),
+            title: Text('Escucha a tus clientes frecuentes'),
+            subtitle: Text('Tus clientes más frecuentes pueden darte ideas para nuevos productos o mejoras. Haz encuestas o entrevistas breves.'),
           ),
         ],
       ),
